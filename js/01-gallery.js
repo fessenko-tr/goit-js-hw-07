@@ -22,10 +22,10 @@ const addItemsToGallery = (pics, gallery) => {
 };
 
 addItemsToGallery(galleryItems, galleryContainerRef);
-console.log(galleryItems);
+// console.log(galleryItems);
 
 links.addEventListener("click", (e) => {
-  if (e.target.nodeName !== "IMG") {
+  if (e.target.nodeName !== "IMG" && e.target !== "A") {
     return;
   }
 
@@ -35,11 +35,11 @@ links.addEventListener("click", (e) => {
   const instance = basicLightbox.create(
     `<img src='${originalPic.dataset.source} alt='${originalPic.alt}'>`
   );
+
   instance.show();
 
-  window.addEventListener("keydown", (e) => {
-    if ((e.key = "Escape")) {
-      instance.close();
-    }
+  window.addEventListener("keypress", (e) => {
+    instance.close();
+    console.log("hehehe");
   });
 });
