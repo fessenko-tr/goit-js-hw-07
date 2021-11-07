@@ -1,13 +1,26 @@
 import { galleryItems } from "./gallery-items.js";
-// Change code below this line
 
 const galleryContainerRef = document.querySelector(".gallery");
-const links = document.querySelector(".gallery");
-const createGalleryMarkup = ({
-  preview,
-  original,
-  description,
-}) => `<div class="gallery__item"> 
+
+addItemsToGallery(galleryItems, galleryContainerRef);
+console.log(galleryItems);
+
+galleryContainerRef.addEventListener("click", (e) => {
+  if (e.target.nodeName !== "IMG") {
+    return;
+  }
+
+  e.preventDefault();
+
+  const currentPic = e.target;
+
+  const slide = createSlide(currentPic);
+  slide.show();
+  closeSlideOnEsc(slide);
+});
+
+function createPicMarkup({ preview, original, description }) {
+  return `<div class="gallery__item">
             <a class="gallery__link" href="${original}">
             <img
             class="gallery__image"
@@ -16,30 +29,31 @@ const createGalleryMarkup = ({
             alt="${description}"/>
             </a>
             </div>`;
+}
 
-const addItemsToGallery = (pics, gallery) => {
-  gallery.innerHTML = pics.map(createGalleryMarkup).join("");
-};
+function addItemsToGallery(pics, gallery) {
+  gallery.innerHTML = pics.map(createPicMarkup).join("");
+}
 
-addItemsToGallery(galleryItems, galleryContainerRef);
-// console.log(galleryItems);
-
-links.addEventListener("click", (e) => {
-  if (e.target.nodeName !== "IMG" && e.target !== "A") {
-    return;
-  }
-
-  e.preventDefault();
-  const originalPic = e.target;
-
-  const instance = basicLightbox.create(
-    `<img src='${originalPic.dataset.source} alt='${originalPic.alt}'>`
+function createSlide(pic) {
+  return basicLightbox.create(
+    `<img src='${pic.dataset.source} alt='${pic.alt}'>`
   );
+}
 
-  instance.show();
+function closeSlideOnEsc(slide) {
+  const isSlideOpen = document.querySelector(".basicLightbox");
 
-  window.addEventListener("keypress", (e) => {
-    instance.close();
-    console.log("hehehe");
-  });
-});
+  if (isSlideOpen) {
+    window.addEventListener(
+      "keydown",
+      (e) => {
+        if (e.key !== "Escape") {
+          return;
+        }
+        slide.close();
+      },
+      { once: true }
+    );
+  }
+}
