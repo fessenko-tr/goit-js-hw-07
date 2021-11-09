@@ -15,8 +15,6 @@ galleryContainerRef.addEventListener("click", (e) => {
 
   const slide = createSlide(currentPic);
   slide.show();
-
-  // closeSlideOnEsc(slide);
 });
 
 function createPicMarkup({ preview, original, description }) {
@@ -41,14 +39,12 @@ function createSlide(pic) {
     `<img src='${pic.dataset.source} alt='${pic.alt}'>`,
     {
       onShow: (slide) => {
-        console.dir(close);
         window.addEventListener(
           "keydown",
           (closeOnEsc = (e) => {
             closeSlideOnEsc(e, slide);
           })
         );
-        console.dir(close);
       },
       onClose: (slide) => {
         window.removeEventListener("keydown", closeOnEsc);
@@ -59,9 +55,7 @@ function createSlide(pic) {
 
 function closeSlideOnEsc(e, slide) {
   if (e.key !== "Escape") {
-    console.log("fail");
     return;
   }
-  console.log("final");
   slide.close();
 }
